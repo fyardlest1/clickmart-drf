@@ -1,0 +1,257 @@
+[
+	{
+		"model": "products.product",
+		"pk": "11111111-1111-1111-1111-111111111111",
+		"fields": {
+			"name": "Haitian Pikliz Jar",
+			"slug": "haitian-pikliz-jar",
+			"description": "Traditional spicy pickled cabbage mix.",
+			"price": "5.99",
+			"discount_price": null,
+			"stock": 120,
+			"is_active": true,
+			"image": "",
+			"category": "Food",
+			"created_at": "2025-01-01T12:00:00Z",
+			"updated_at": "2025-01-01T12:00:00Z"
+		}
+	},
+	{
+		"model": "products.product",
+		"pk": "22222222-2222-2222-2222-222222222222",
+		"fields": {
+			"name": "Caribbean Mango Juice",
+			"slug": "caribbean-mango-juice",
+			"description": "Fresh mango drink from local farms.",
+			"price": "3.50",
+			"discount_price": "2.99",
+			"stock": 80,
+			"is_active": true,
+			"image": "",
+			"category": "Drinks",
+			"created_at": "2025-01-02T10:00:00Z",
+			"updated_at": "2025-01-02T10:00:00Z"
+		}
+	},
+	{
+		"model": "products.product",
+		"pk": "33333333-3333-3333-3333-333333333333",
+		"fields": {
+			"name": "Haitian Coffee Premium",
+			"slug": "haitian-coffee-premium",
+			"description": "Strong Haitian coffee with deep aroma.",
+			"price": "12.00",
+			"discount_price": null,
+			"stock": 60,
+			"is_active": true,
+			"image": "",
+			"category": "Drinks",
+			"created_at": "2025-01-03T09:30:00Z",
+			"updated_at": "2025-01-03T09:30:00Z"
+		}
+	},
+	{
+		"model": "products.product",
+		"pk": "44444444-4444-4444-4444-444444444444",
+		"fields": {
+			"name": "Fried Plantain Chips",
+			"slug": "fried-plantain-chips",
+			"description": "Crispy Caribbean-style plantain chips.",
+			"price": "4.25",
+			"discount_price": null,
+			"stock": 200,
+			"is_active": true,
+			"image": "",
+			"category": "Snacks",
+			"created_at": "2025-01-04T14:00:00Z",
+			"updated_at": "2025-01-04T14:00:00Z"
+		}
+	},
+	{
+		"model": "products.product",
+		"pk": "55555555-5555-5555-5555-555555555555",
+		"fields": {
+			"name": "Griot Seasoning Mix",
+			"slug": "griot-seasoning-mix",
+			"description": "Authentic seasoning mix for Haitian griot.",
+			"price": "6.75",
+			"discount_price": "5.99",
+			"stock": 150,
+			"is_active": true,
+			"image": "",
+			"category": "Spices",
+			"created_at": "2025-01-05T11:00:00Z",
+			"updated_at": "2025-01-05T11:00:00Z"
+		}
+	},
+	{
+		"model": "products.product",
+		"pk": "66666666-6666-6666-6666-666666666666",
+		"fields": {
+			"name": "Tamarind Juice",
+			"slug": "tamarind-juice",
+			"description": "Sweet and tangy Caribbean tamarind drink.",
+			"price": "2.99",
+			"discount_price": null,
+			"stock": 100,
+			"is_active": true,
+			"image": "",
+			"category": "Drinks",
+			"created_at": "2025-01-06T08:00:00Z",
+			"updated_at": "2025-01-06T08:00:00Z"
+		}
+	},
+	{
+		"model": "products.product",
+		"pk": "77777777-7777-7777-7777-777777777777",
+		"fields": {
+			"name": "Haitian Black Rice (Diri Djon Djon)",
+			"slug": "haitian-black-rice",
+			"description": "Premium black mushroom rice from Haiti.",
+			"price": "14.99",
+			"discount_price": null,
+			"stock": 70,
+			"is_active": true,
+			"image": "",
+			"category": "Food",
+			"created_at": "2025-01-07T10:00:00Z",
+			"updated_at": "2025-01-07T10:00:00Z"
+		}
+	},
+	{
+		"model": "products.product",
+		"pk": "88888888-8888-8888-8888-888888888888",
+		"fields": {
+			"name": "Coconut Water Bottle",
+			"slug": "coconut-water-bottle",
+			"description": "Natural coconut water from local islands.",
+			"price": "2.50",
+			"discount_price": "1.99",
+			"stock": 90,
+			"is_active": true,
+			"image": "",
+			"category": "Drinks",
+			"created_at": "2025-01-08T12:45:00Z",
+			"updated_at": "2025-01-08T12:45:00Z"
+		}
+	},
+	{
+		"model": "products.product",
+		"pk": "99999999-9999-9999-9999-999999999999",
+		"fields": {
+			"name": "Spicy Peanut Butter",
+			"slug": "spicy-peanut-butter",
+			"description": "Caribbean spicy peanut blend.",
+			"price": "7.99",
+			"discount_price": null,
+			"stock": 40,
+			"is_active": true,
+			"image": "",
+			"category": "Food",
+			"created_at": "2025-01-09T17:00:00Z",
+			"updated_at": "2025-01-09T17:00:00Z"
+		}
+	},
+	{
+		"model": "products.product",
+		"pk": "aaaaaaa1-aaaa-aaaa-aaaa-aaaaaaaaaaa1",
+		"fields": {
+			"name": "Haitian Rum Cake",
+			"slug": "haitian-rum-cake",
+			"description": "Soft Caribbean rum-infused cake.",
+			"price": "15.50",
+			"discount_price": null,
+			"stock": 55,
+			"is_active": true,
+			"image": "",
+			"category": "Desserts",
+			"created_at": "2025-01-10T13:00:00Z",
+			"updated_at": "2025-01-10T13:00:00Z"
+		}
+	},
+	{
+		"model": "products.product",
+		"pk": "aaaaaaa2-aaaa-aaaa-aaaa-aaaaaaaaaaa2",
+		"fields": {
+			"name": "Pineapple Soda",
+			"slug": "pineapple-soda",
+			"description": "Classic tropical pineapple-flavored soda.",
+			"price": "1.75",
+			"discount_price": null,
+			"stock": 180,
+			"is_active": true,
+			"image": "",
+			"category": "Drinks",
+			"created_at": "2025-01-11T16:00:00Z",
+			"updated_at": "2025-01-11T16:00:00Z"
+		}
+	},
+	{
+		"model": "products.product",
+		"pk": "aaaaaaa3-aaaa-aaaa-aaaa-aaaaaaaaaaa3",
+		"fields": {
+			"name": "Cinnamon Island Cookies",
+			"slug": "cinnamon-island-cookies",
+			"description": "Handmade Caribbean cinnamon cookies.",
+			"price": "4.99",
+			"discount_price": "3.99",
+			"stock": 95,
+			"is_active": true,
+			"image": "",
+			"category": "Snacks",
+			"created_at": "2025-01-12T19:00:00Z",
+			"updated_at": "2025-01-12T19:00:00Z"
+		}
+	},
+	{
+		"model": "products.product",
+		"pk": "aaaaaaa4-aaaa-aaaa-aaaa-aaaaaaaaaaa4",
+		"fields": {
+			"name": "Haitian Candy Mix",
+			"slug": "haitian-candy-mix",
+			"description": "Traditional Haitian sweets assortment.",
+			"price": "3.25",
+			"discount_price": null,
+			"stock": 110,
+			"is_active": true,
+			"image": "",
+			"category": "Snacks",
+			"created_at": "2025-01-13T14:20:00Z",
+			"updated_at": "2025-01-13T14:20:00Z"
+		}
+	},
+	{
+		"model": "products.product",
+		"pk": "aaaaaaa5-aaaa-aaaa-aaaa-aaaaaaaaaaa5",
+		"fields": {
+			"name": "Caribbean Hot Sauce",
+			"slug": "caribbean-hot-sauce",
+			"description": "Fiery pepper sauce from local peppers.",
+			"price": "6.25",
+			"discount_price": null,
+			"stock": 130,
+			"is_active": true,
+			"image": "",
+			"category": "Spices",
+			"created_at": "2025-01-14T11:00:00Z",
+			"updated_at": "2025-01-14T11:00:00Z"
+		}
+	},
+	{
+		"model": "products.product",
+		"pk": "aaaaaaa6-aaaa-aaaa-aaaa-aaaaaaaaaaa6",
+		"fields": {
+			"name": "Lime Ginger Tea Bags",
+			"slug": "lime-ginger-tea-bags",
+			"description": "Caribbean blend lime & ginger herbal tea.",
+			"price": "5.50",
+			"discount_price": null,
+			"stock": 140,
+			"is_active": true,
+			"image": "",
+			"category": "Drinks",
+			"created_at": "2025-01-15T08:00:00Z",
+			"updated_at": "2025-01-15T08:00:00Z"
+		}
+	}
+]
