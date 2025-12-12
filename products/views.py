@@ -20,6 +20,7 @@ class ProductDetailView(generics.RetrieveAPIView):
     """GET    /products/<id>/  => Retrieve single product"""
     queryset = Product.objects.filter(is_active=True)
     serializer_class = ProductSerializer
+    lookup_field = "id"
 
 
 # class ProductDetailView(generics.RetrieveUpdateDestroyAPIView):

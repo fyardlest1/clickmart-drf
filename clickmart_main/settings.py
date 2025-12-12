@@ -42,6 +42,7 @@ INSTALLED_APPS = [
     # local app
     'users',
     'api',
+    'carts',
     'products',
     # third-party
     'rest_framework',
