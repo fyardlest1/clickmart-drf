@@ -18,6 +18,7 @@ class ProductSerializer(serializers.ModelSerializer):
             "description",
             "price",
             "discount_price",
+            "tax_percent",
             "final_price",
             "stock",
             "is_active",

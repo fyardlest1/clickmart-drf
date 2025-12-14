@@ -2,6 +2,7 @@ import uuid
 from decimal import Decimal
 from django.db import models
 from django.utils.text import slugify
+from django.core.validators import MinValueValidator, MaxValueValidator
 
 
 class Product(models.Model):
@@ -29,6 +30,18 @@ class Product(models.Model):
         help_text="Leave empty if no discount"
     )
 
+    tax_percent = models.DecimalField(
+        max_digits=5,          # allows values like 100.00
+        decimal_places=2,
+        default=Decimal("0.00"),
+        # Prevent invalid values like -10 or 500
+        validators=[
+            MinValueValidator(Decimal("0.00")),
+            MaxValueValidator(Decimal("100.00")),
+        ],
+        help_text="Tax percentage (e.g. 15.00 for 15%)"
+    )
+    
     # Inventory
     stock = models.PositiveIntegerField(default=0)
     is_active = models.BooleanField(default=True)
@@ -48,6 +61,7 @@ class Product(models.Model):
     created_at = models.DateTimeField(auto_now_add=True) # only at created time, can not be changed later (created once)
     updated_at = models.DateTimeField(auto_now=True) # can be change anytime
 
+    # Methods
     # Auto-generate slug
     def save(self, *args, **kwargs):
         if not self.slug:
@@ -67,9 +81,21 @@ class Product(models.Model):
     # Price utility
     @property
     def final_price(self):
+        """
+        Returns price after discount (if any), WITHOUT tax
+        """
         if self.discount_price and self.discount_price < self.price:
             return self.discount_price
         return self.price
+
+    @property
+    def price_with_tax(self):
+        """
+        Returns final price INCLUDING tax
+        """
+        base_price = self.final_price
+        tax_amount = (base_price * self.tax_percent) / Decimal("100")
+        return base_price + tax_amount
 
     def __str__(self):
         return self.name

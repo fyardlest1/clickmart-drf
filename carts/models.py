@@ -1,7 +1,9 @@
+# carts/models.py
 import uuid
 from django.db import models
 from django.contrib.auth import get_user_model
 from products.models import Product
+from decimal import Decimal
 
 # get the user
 User = get_user_model()
@@ -18,6 +20,22 @@ class Cart(models.Model):
 
     def __str__(self):
         return f"Cart({self.user})"
+    
+    @property
+    def subtotal(self):
+        return sum(
+            (item.product.final_price * item.quantity)
+            for item in self.items.all()
+        )
+
+    @property
+    def tax_total(self):
+        return sum(
+            (
+                (item.product.final_price * item.product.taxe_percent) / Decimal("100")
+            ) * item.quantity
+            for item in self.items.all()
+        )
 
     @property
     def total(self):
@@ -41,4 +59,5 @@ class CartItem(models.Model):
 
     @property
     def subtotal(self):
-        return self.product.final_price * self.quantity
+        # Never trust frontend tax calculations.
+        return self.product.price_with_tax * self.quantity
