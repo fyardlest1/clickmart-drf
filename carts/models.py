@@ -21,23 +21,30 @@ class Cart(models.Model):
     def __str__(self):
         return f"Cart({self.user})"
     
-    @property
+    """
+    You should NOT store totals in the database
+    """
+    
+    # Total price before tax for all items
+    @property  # (can be use everywhere)
     def subtotal(self):
         return sum(
             (item.product.final_price * item.quantity)
             for item in self.items.all()
         )
 
-    @property
+    # Total tax amount for the entire cart.
+    @property  # (can be use everywhere)
     def tax_total(self):
         return sum(
             (
-                (item.product.final_price * item.product.taxe_percent) / Decimal("100")
+                (item.product.final_price * item.product.tax_percent) / Decimal("100")
             ) * item.quantity
             for item in self.items.all()
         )
 
-    @property
+    # Final cart amount (clean design: cart delegates to item logic).
+    @property  # (can be use everywhere)
     def total(self):
         return sum(item.subtotal for item in self.items.all())
     

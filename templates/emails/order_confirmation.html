@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Order Confirmation</title>
+</head>
+<body>
+    <h2>Thank you for your order, {{ user.first_name }}!</h2>
+
+    <p>
+        Your order <strong>{{ order.order_number }}</strong>
+        has been successfully placed.
+    </p>
+
+    <hr>
+
+    <h3>Order Summary</h3>
+    <ul>
+        {% for item in items %}
+            <li>
+                {{ item.quantity }} × {{ item.product_name }}
+                — {{ item.line_total }} {{ order.currency }}
+            </li>
+        {% endfor %}
+    </ul>
+
+    <p><strong>Total:</strong> {{ order.total_amount }} {{ order.currency }}</p>
+
+    <hr>
+
+    <p>
+        If you have any questions, contact us at
+        <a href="mailto:{{ support_email }}">{{ support_email }}</a>.
+    </p>
+
+    <p>— {{ company_name }}</p>
+</body>
+</html>
