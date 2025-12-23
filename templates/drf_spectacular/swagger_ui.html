@@ -1,0 +1,35 @@
+{% extends "drf_spectacular/swagger_ui.html" %}
+
+{% block extra_head %}
+<style>
+    /* 1. Change the Top Bar Background Color */
+    .swagger-ui .topbar {
+        background-color: #2c3e50 !important; /* Example: Dark Blue */
+        border-bottom: 3px solid #e74c3c;     /* Example: Red accent line */
+    }
+
+    /* 2. Hide the default Swagger Logo text if you want */
+    .swagger-ui .topbar .link {
+        display: flex;
+        align-items: center;
+    }
+
+    /* 3. Insert your own Logo (Optional) */
+    /* This replaces the Swagger image with your own URL */
+    .swagger-ui .topbar .link img {
+        content: url('https://upload.wikimedia.org/wikipedia/commons/c/c3/Python-logo-notext.svg');
+        height: 40px;
+        width: auto;
+    }
+
+    /* 4. Customize the "Authorize" button color */
+    .swagger-ui .btn.authorize {
+        background-color: #27ae60 !important;
+        border-color: #27ae60 !important;
+        color: white !important;
+    }
+    .swagger-ui .btn.authorize svg {
+        fill: white !important;
+    }
+</style>
+{% endblock %}

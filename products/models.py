@@ -23,10 +23,15 @@ class Product(models.Model):
     price = models.DecimalField(max_digits=10, decimal_places=2, default=Decimal("0.00"))
     
     discount_price = models.DecimalField(
-        max_digits=10,
+        max_digits=5,
         decimal_places=2,
         blank=True,
         null=True,
+        # Prevent invalid values like -10 or 500
+        validators=[
+            MinValueValidator(Decimal("0.00")),
+            MaxValueValidator(Decimal("100.00")),
+        ],
         help_text="Leave empty if no discount"
     )
 

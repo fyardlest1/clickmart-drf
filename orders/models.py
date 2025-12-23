@@ -5,7 +5,7 @@ from django.conf import settings
 from django.db import models
 from django.utils import timezone
 from django.contrib.auth import get_user_model
-from django.core.validators import MinValueValidator
+from django.core.validators import MinValueValidator, MaxValueValidator
 
 from products.models import Product
 
@@ -23,25 +23,18 @@ class Order(models.Model):
     # ───────────────────────────────
     # Order Status Lifecycle
     # ───────────────────────────────
-    class Status(models.TextChoices):
-        DRAFT = "draft", "Draft"
-        PENDING = "pending", "Pending Payment"
-        PAID = "paid", "Paid"
-        PROCESSING = "processing", "Processing"
-        SHIPPED = "shipped", "Shipped"
-        COMPLETED = "completed", "Completed"
-        CANCELLED = "cancelled", "Cancelled"
-        REFUNDED = "refunded", "Refunded"
-        FAILED = "failed", "Failed"
-        
-    # OR
-    # STATUS_CHOICES = [
-    #     # ('VALUE', 'Label')
-    #     ('PENDING', 'Pending'),
-    #     ('CONFIRMED', 'Confirmed'),
-    #     ('SHIPPED', 'Shipped'),
-    #     ('DELIVERD', 'Delivered'),
-    # ]    
+    STATUS_CHOICES = [
+        ('DRAFT', 'Draft'),
+        ('PENDING', 'Pending Payment'),
+        ('PAID', 'Paid'),
+        ('PROCESSING', 'Processing'),
+        ('SHIPPED', 'Shipped'),
+        ('COMPLETED', 'Completed'),
+        ('DELIVERED', 'Delivered'),
+        ('CANCELLED', 'Cancelled'),
+        ('REFUNDED', 'Refunded'),
+        ('FAILED', 'Failed'),
+    ]    
 
     # ───────────────────────────────
     # Primary Identifiers
@@ -57,7 +50,7 @@ class Order(models.Model):
     # ───────────────────────────────
     # Status & Lifecycle
     # ───────────────────────────────
-    status = models.CharField(max_length=20, choices=Status.choices, default=Status.DRAFT, db_index=True)
+    status = models.CharField(max_length=20, choices=STATUS_CHOICES, default="DRAFT", db_index=True)
 
     # ───────────────────────────────
     # Financial Fields (IMMUTABLE)
@@ -84,11 +77,11 @@ class Order(models.Model):
     # ───────────────────────────────
     # Shipping & Billing (Snapshot)
     # ───────────────────────────────
-    billing_address = models.JSONField(
-        blank=True,
-        null=True,
-        help_text="Snapshot of billing address at purchase time"
-    )
+    # billing_address = models.JSONField(
+    #     blank=True,
+    #     null=True,
+    #     help_text="Snapshot of billing address at purchase time"
+    # )
 
     shipping_address = models.JSONField(
         blank=True,
@@ -97,8 +90,9 @@ class Order(models.Model):
     )
     phone = models.CharField(max_length=20, blank=True, null=True, help_text="Contact phone number for the order")
     city = models.CharField(max_length=50, blank=True, null=True, help_text="City for the shipping address")
+    state = models.CharField(max_length=50, blank=True, null=True, help_text="State for the shipping address")
     postal_code = models.CharField(max_length=20, blank=True, null=True, help_text="Postal code for the shipping address")
-    country = models.CharField(max_length=50, blank=True, null=True, help_text="Country for the shipping address")
+    country = models.CharField(max_length=50, blank=True, null=True, default="Canada", help_text="Country for the shipping address")
 
     # ───────────────────────────────
     # Audit & Metadata
@@ -206,6 +200,11 @@ class OrderItem(models.Model):
         max_digits=5,
         decimal_places=2,
         default=Decimal("0.00"),
+        # Prevent invalid values like -10 or 500
+        validators=[
+            MinValueValidator(Decimal("0.00")),
+            MaxValueValidator(Decimal("100.00")),
+        ],
         help_text="Tax percent applied at purchase time"
     )
 

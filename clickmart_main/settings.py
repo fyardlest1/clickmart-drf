@@ -33,6 +33,7 @@ ALLOWED_HOSTS = []
 # Application definition
 
 INSTALLED_APPS = [
+    'jazzmin',
     'django.contrib.admin',
     'django.contrib.auth',
     'django.contrib.contenttypes',
@@ -157,11 +158,10 @@ MEDIA_ROOT = BASE_DIR / "media"
 AUTH_USER_MODEL = "users.User"
 
 REST_FRAMEWORK = {
+    'DEFAULT_SCHEMA_CLASS': 'drf_spectacular.openapi.AutoSchema',
     'DEFAULT_AUTHENTICATION_CLASSES': (
         'rest_framework_simplejwt.authentication.JWTAuthentication',
-    ),
-    
-    'DEFAULT_SCHEMA_CLASS': 'drf_spectacular.openapi.AutoSchema',
+    ),    
 }
 
 
@@ -180,6 +180,23 @@ SPECTACULAR_SETTINGS = {
     # Optional but very useful
     'COMPONENT_SPLIT_REQUEST': True,
     'SCHEMA_PATH_PREFIX': r'/api',
+    
+    # --- SECURITY CONFIGURATION ---
+    # This configures the "Authorize" button
+    'COMPONENT_SPLIT_REQUEST': True,
+    'SECURITY': [{'Bearer': []}], # Default security scheme to use globally
+    'APPEND_COMPONENTS': {
+        'securitySchemes': {
+            'Bearer': {
+                'type': 'http',
+                'scheme': 'bearer',
+                'bearerFormat': 'JWT',
+            }
+        }
+    },
+    
+    # This function defines how tags are generated
+    'SCHEMA_COERCION_PATH_PK_SUFFIX': True,
 }
 
 
@@ -197,5 +214,31 @@ DEFAULT_FROM_EMAIL = config('DEFAULT_FROM_EMAIL', default='Click Mart <noreply@c
 
 
 CORS_ALLOWED_ORIGINS = [
+    # list of domains allowed to make cross-origin requests
     "http://localhost:5173",
 ]
+
+# Jazzmin Admin Configurations
+JAZZMIN_SETTINGS = {
+    # Title on the login screen (19 chars max)
+    "site_header": "API E-Commerce Admin",
+
+    # Title on the brand (19 chars max)
+    "site_brand": "Mart API integration...",
+
+    # Copyright text shown in the footer
+    "copyright": "FYARDLEST - All Right Reserved @Copyright 2026",
+    
+    "show_ui_builder": True,
+
+    # Add a language dropdown into the admin (optional)
+    # "language_chooser": True,
+}
+# End of JAZZMIN_SETTINGS
+
+# Jazzmin UI Theme Configurations
+JAZZMIN_UI_TWEAKS = {
+    "theme": "solar",  # Bootswatch theme name
+    "dark_mode_theme": "darkly",  # Bootswatch theme name for dark mode
+}
+# End of JAZZMIN_UI_TWEAKS

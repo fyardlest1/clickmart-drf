@@ -6,6 +6,7 @@ from .models import Cart, CartItem
 from .serializers import CartSerializer, CartItemSerializer
 from products.models import Product
 from django.shortcuts import get_object_or_404
+from drf_spectacular.utils import extend_schema
 
 
 # THE FOLLOWING CODE USE APIVIEW INSTEAD OF GENERICS
@@ -19,78 +20,71 @@ def get_or_create_cart(user):
     return cart
 
 
-class CartDetailView(APIView):
+class CartView(APIView):
     """
     GET /cart/ => Get current user's cart
     """
     permission_classes = [IsAuthenticated]
 
+    @extend_schema(
+        tags=['Cart'],
+        summary="Get cart details",
+        description="Retrieve the details of the currently logged-in user's cart."
+    )
     def get(self, request):
+        # get or create the cart
         cart = get_or_create_cart(request.user)
         serializer = CartSerializer(cart)
         return Response(serializer.data, status=status.HTTP_200_OK)
 
 
 class AddToCartView(APIView):
-    """
-    POST /cart/add/ => Add product to cart
-    Body:
-    {
-        "product_id": "uuid",
-        "quantity": 2
-    }
-    """
     permission_classes = [IsAuthenticated]
-    
+
+    @extend_schema(
+        tags=['Cart'],
+        summary="Add product to cart",
+        description="Add a specified product to the current user's cart."
+    )
     def post(self, request):
+        # take the input
+        product_id = request.data.get('product_id')
+        quantity = request.data.get('quantity') # 2
+
+        if not product_id:
+            return Response({'error': 'product_id is required'})
+        
+        # get the product
+        product = get_object_or_404(Product, id=product_id, is_active=True)
+        
+        # get or create the cart
         cart = get_or_create_cart(request.user)
-        serializer = CartItemSerializer(
-            data=request.data,
-            context={
-                "cart": cart,
-                "product_model": Product
-            }
-        )
-        if serializer.is_valid():
-            serializer.save()
-            return Response(serializer.data, status=status.HTTP_201_CREATED)
-        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
-    
-    # USING THE CARTSERIALISER
-    # def post(self, request):
-    #     # take the input
-    #     product_id = request.data.get('product_id')
-    #     quantity= request.data.get('quantity')
+
+        # get or create cartitem
+        item, created = CartItem.objects.get_or_create(cart=cart, product=product)
+
+        if not created: # cart item already exist
+            # item.quantity = item.quantity + quantity
+            item.quantity += int(quantity)
+            item.save()
         
-    #     if not product_id:
-    #         return Response({'error': 'prodict_id is required'})
-        
-    #     # get the product
-    #     product = get_object_or_404(Product, id=product_id, is_active=True)
-        
-    #     # get the cart
-    #     cart = get_or_create_cart(request.user)
-        
-    #     # get or create the cart item
-    #     item, create = CartItem.objects.get_or_create(cart=cart, product=product)
-        
-    #     if not create:
-    #         # item.quantity = item.quantity + int(quantity)
-    #         item.quantity += int(quantity)
-    #         item.save()
-            
-    #     serializer = CartSerializer(cart)
-    #     return Response(serializer.data, status=status.HTTP_201_CREATED)
+        serializer = CartSerializer(cart)
+        return Response(serializer.data, status=status.HTTP_200_OK)
 
 
-class ManageCartItem(APIView):
+class ManageCartItemView(APIView):
     """
-    PATCH /cart/item/<item_id>/ => Update cart item quantity
+    PATCH /cart/items/<item_id>/ => Update cart item quantity
     Body:
     {
         "quantity": 5
     }
     """
+    @extend_schema(
+        tags=['Cart'],
+        summary="Update cart item",
+        description="Update the quantity of a specific item in the cart."
+    )
     def patch(self, request, item_id):
         # validate
         if 'change' not in request.data:
@@ -119,49 +113,16 @@ class ManageCartItem(APIView):
         item.quantity = new_qty
         item.save()
         serializer = CartItemSerializer(item)
-        return Response(serializer.data, status=status.HTTP_201_CREATED)
+        return Response(serializer.data, status=status.HTTP_200_OK)
     
+    @extend_schema(tags=["Cart"], summary="Remove cart item", description="Remove a specific item from the cart.")
     def delete(self, request, item_id):
         cart_item = get_object_or_404(CartItem, id=item_id)
         cart_item.delete()
         return Response(status=status.HTTP_204_NO_CONTENT)
 
 
-class UpdateCartItemView(APIView):
-    """
-    PATCH /cart/item/<item_id>/ => Update cart item quantity
-    Body:
-    {
-        "quantity": 5
-    }
-    """
-    permission_classes = [IsAuthenticated]
 
-    def get_object(self, item_id):
-        return get_object_or_404(CartItem, id=item_id)
-
-    def patch(self, request, item_id):
-        cart_item = self.get_object(item_id)
-        serializer = CartItemSerializer(cart_item, data=request.data, partial=True)
-        if serializer.is_valid():
-            serializer.save()
-            return Response(serializer.data, status=status.HTTP_200_OK)
-        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
-
-
-class RemoveCartItemView(APIView):
-    """
-    DELETE /cart/item/<item_id>/ => Remove product from cart
-    """
-    permission_classes = [IsAuthenticated]
-
-    def get_object(self, item_id):
-        return get_object_or_404(CartItem, id=item_id)
-
-    def delete(self, request, item_id):
-        cart_item = self.get_object(item_id)
-        cart_item.delete()
-        return Response(status=status.HTTP_204_NO_CONTENT)
 
 
 
@@ -210,30 +171,34 @@ class AddToCartView(generics.CreateAPIView):
             "cart": get_or_create_cart(self.request.user),
             "product_model": Product
         }
-
-
-# API view to update quantity of a cart item
-class UpdateCartItemView(generics.UpdateAPIView):
-    """
-    PUT/PATCH /cart/item/<item_id>/
-    Body:
-    {
-        "quantity": 5
-    }
-    """
-    serializer_class = CartItemSerializer
-    queryset = CartItem.objects.all()
-    permission_classes = [IsAuthenticated]
-    lookup_field = "id"
-
-
-# API view to remove a cart item
-class RemoveCartItemView(generics.DestroyAPIView):
-    """
-    DELETE /cart/item/<item_id>/ → remove product from cart
-    """
-    queryset = CartItem.objects.all()
-    permission_classes = [IsAuthenticated]
-    lookup_field = "id"
 '''
+
+
+# class CartItemDetailView(APIView):
+#     """
+#     PATCH /cart/items/<item_id>/ => Update cart item quantity
+#     DELETE /cart/items/<item_id>/ => Remove product from cart
+#     """
+#     permission_classes = [IsAuthenticated]
+
+#     def get_object(self, item_id):
+#         return get_object_or_404(CartItem, id=item_id)
+
+#     @extend_schema(tags=["Cart"], summary="Update cart item quantity")
+#     def patch(self, request, item_id):
+#         cart_item = self.get_object(item_id)
+#         serializer = CartItemSerializer(
+#             cart_item, data=request.data, partial=True
+#         )
+#         serializer.is_valid(raise_exception=True)
+#         serializer.save()
+#         return Response(serializer.data)
+
+#     @extend_schema(tags=["Cart"], summary="Remove cart item", description="Remove a specific item from the cart.")
+#     def delete(self, request, item_id):
+#         cart_item = self.get_object(item_id)
+#         cart_item.delete()
+#         return Response(status=status.HTTP_204_NO_CONTENT)
+
+
 

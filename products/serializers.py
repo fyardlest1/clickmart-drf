@@ -2,15 +2,17 @@ from rest_framework import serializers
 from .models import Product
 
 
-class ProductSerializer(serializers.ModelSerializer):
+class ProductSerializer(serializers.ModelSerializer):\
+    # Correct Way to Expose a @property field
     final_price = serializers.DecimalField(
-        max_digits=10, 
-        decimal_places=2, 
+        max_digits=10,
+        decimal_places=2,
         read_only=True
     )
 
     class Meta:
         model = Product
+        
         fields = [
             "id",
             "name",
@@ -27,4 +29,6 @@ class ProductSerializer(serializers.ModelSerializer):
             "created_at",
             "updated_at",
         ]
+        
         read_only_fields = ["id", "slug", "created_at", "updated_at", "final_price"]
+
